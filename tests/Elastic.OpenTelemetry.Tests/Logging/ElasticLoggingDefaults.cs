@@ -56,6 +56,10 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 
 		logRecord.ForEachScope<object?>((scope, _) =>
 		{
+//			logger.LogRecord("deleteme");
+//			logger.LogRecord("deleteme");
+//			logger.LogRecord("deleteme");
+//			logger.LogRecord("deleteme");
 			var values = scope.Scope as IEnumerable<KeyValuePair<string, object>>;
 
 			Assert.NotNull(values);
