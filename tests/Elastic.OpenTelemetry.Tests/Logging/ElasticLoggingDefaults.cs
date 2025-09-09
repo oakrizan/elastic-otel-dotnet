@@ -44,6 +44,7 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 				new("customData", "aCustomValue"),
 			}))
 			{
+				logger.LogRecord("deleteme");
 				logger.LogWarning("This is a {WhatAmI}", "warning");
 			}
 
@@ -56,10 +57,6 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 
 		logRecord.ForEachScope<object?>((scope, _) =>
 		{
-//			logger.LogRecord("deleteme");
-//			logger.LogRecord("deleteme");
-//			logger.LogRecord("deleteme");
-//			logger.LogRecord("deleteme");
 			var values = scope.Scope as IEnumerable<KeyValuePair<string, object>>;
 
 			Assert.NotNull(values);
