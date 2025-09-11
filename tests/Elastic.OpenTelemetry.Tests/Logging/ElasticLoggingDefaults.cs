@@ -45,6 +45,7 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 			}))
 			{
 				logger.LogWarning("This is a {WhatAmI}", "warning");
+				logger.LogWarning("deleteme {WhatAmI}", "warning");
 			}
 
 			await ctx.DisposeAsync();
