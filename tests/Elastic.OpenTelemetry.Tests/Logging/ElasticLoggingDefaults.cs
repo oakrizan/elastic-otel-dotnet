@@ -44,6 +44,7 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 				new("customData", "aCustomValue"),
 			}))
 			{
+				logger.LogRecord("that will make error");
 				logger.LogWarning("This is a {WhatAmI}", "warning");
 			}
 
@@ -52,7 +53,6 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 
 		var logRecord = exportedItems.Last();
 
-		Assert.Equal("This is a warning", logRecord.FormattedMessage);
 		Assert.Equal("This is a warning", logRecord.FormattedMessage);
 
 		logRecord.ForEachScope<object?>((scope, _) =>
