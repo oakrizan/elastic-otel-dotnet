@@ -53,6 +53,7 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 		var logRecord = exportedItems.Last();
 
 		Assert.Equal("This is a warning", logRecord.FormattedMessage);
+		Assert.Equal("This is a warning", logRecord.FormattedMessage);
 
 		logRecord.ForEachScope<object?>((scope, _) =>
 		{

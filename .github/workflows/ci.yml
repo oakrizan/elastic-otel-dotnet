@@ -13,6 +13,8 @@ on:
       - '*.md'
       - '*.asciidoc'
       - 'docs/**'
+      # TODO: DELETE AFTER, JUST FOR TESTING PURPOSES
+      - '.github/**'
 
 permissions:
   contents: read
