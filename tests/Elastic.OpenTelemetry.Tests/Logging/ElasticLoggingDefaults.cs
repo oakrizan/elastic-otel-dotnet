@@ -45,7 +45,6 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 			}))
 			{
 				logger.LogWarning("This is a {WhatAmI}", "warning");
-				logger.LogWarning("deleteme {WhatAmI}", "warning");
 			}
 
 			await ctx.DisposeAsync();
@@ -53,6 +52,7 @@ public class ElasticLoggingDefaults(ITestOutputHelper output)
 
 		var logRecord = exportedItems.Last();
 
+		Assert.Equal("This is a warning", logRecord.FormattedMessage);
 		Assert.Equal("This is a warning", logRecord.FormattedMessage);
 
 		logRecord.ForEachScope<object?>((scope, _) =>
