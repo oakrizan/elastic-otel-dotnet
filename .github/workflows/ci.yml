@@ -4,17 +4,17 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '*.md'
-      - '*.asciidoc'
-      - 'docs/**'
+    paths:
+      - '!*.md'
+      - '!*.asciidoc'
+      - '!docs/**'
   pull_request:
-    paths-ignore:
-      - '*.md'
-      - '*.asciidoc'
-      - 'docs/**'
+    paths:
+      - '!*.md'
+      - '!*.asciidoc'
+      - '!docs/**'
       # TODO: DELETE AFTER, JUST FOR TESTING PURPOSES
-      - '.github/**'
+      - '!.github/**'
 
 permissions:
   contents: read
