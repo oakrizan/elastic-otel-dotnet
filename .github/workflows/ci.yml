@@ -13,7 +13,7 @@ on:
       - '*.md'
       - '*.asciidoc'
       - 'docs/**'
-      # TODO: DELETE AFTER, JUST FOR TESTING PURPOSES
+#  TODO: just for testing
       - '.github/**'
 
 permissions:
@@ -21,7 +21,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: false
 
 env:
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
