@@ -1,0 +1,109 @@
+name: Pull Request Validation v2
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+# NOTE: if you add a new job and it's a mandatory check then
+#       update ci-docs.yml
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      docs: ${{ steps.changes.outputs.docs }}
+      non-docs: ${{ steps.changes.outputs.non-docs }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Filter file changes
+        id: changes
+        uses: AurorNZ/paths-filter@v4
+        with:
+          filters: |
+            docs:
+              - '**/*.md'
+              - '**/*.asciidoc'
+              - 'docs/**'
+              - '.github/**'
+            non-docs:
+              - '!**/*.md'
+              - '!**/*.asciidoc'
+              - '!(docs)/**/*'
+              - '!(.github)/**/*'
+
+  test-windows:
+    needs: changes
+    name: Windows Tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+
+      - name: Bootstrap Action Workspace
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+        id: bootstrap
+        uses: ./.github/workflows/bootstrap
+
+      - name: Unit Tests
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+        run: build.bat test --test-suite=unit
+        shell: cmd
+
+      - name: Docs
+        if: ${{ needs.changes.outputs.docs == 'true' && needs.changes.outputs.non-docs == 'false' }}
+        run: 'echo "Not required for docs"'
+
+  test-linux:
+    needs: changes
+    name: Linux Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+
+      - name: Bootstrap Action Workspace
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+        id: bootstrap
+        uses: ./.github/workflows/bootstrap
+
+      - name: Unit Tests
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+        run: ./build.sh test --test-suite=unit # For now, we limit to unit tests only, until we have a better way to run integration tests only for autoinstrumentation builds
+
+      - name: Docs
+        if: ${{ needs.changes.outputs.docs == 'true' && needs.changes.outputs.non-docs == 'false' }}
+        run: 'echo "Not required for docs"'
+
+  # We still run the full release build on pull-requests this ensures packages are validated ahead of time
+  release-build:
+    needs: changes
+    name: Release Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+
+      - name: Bootstrap Action Workspace
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+        id: bootstrap
+        uses: ./.github/workflows/bootstrap
+
+      - name: Release
+        if: ${{ needs.changes.outputs.non-docs == 'true' }}
+        run: ./build.sh release -c
+
+      - name: Docs
+        if: ${{ needs.changes.outputs.docs == 'true' && needs.changes.outputs.non-docs == 'false' }}
+        run: 'echo "Not required for docs"'
