@@ -29,19 +29,19 @@ jobs:
 
       - name: Filter file changes
         id: changes
-        uses: dorny/paths-filter@v3
+        uses: AurorNZ/paths-filter@v4
         with:
           filters: |
             docs:
-              - '*.md'
-              - '*.asciidoc'
+              - '**/*.md'
+              - '**/*.asciidoc'
               - 'docs/**'
+              - '.github/**'
             non-docs:
-              - '**'
-              - '!*.md'
-              - '!*.asciidoc'
-              - '!docs/**'
-
+              - '!**/*.md'
+              - '!**/*.asciidoc'
+              - '!(docs)/**/*'
+              - '!(.github)/**/*'
   test-windows:
     needs: changes
     name: Windows Tests
