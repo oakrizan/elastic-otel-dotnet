@@ -36,12 +36,10 @@ jobs:
               - '**/*.md'
               - '**/*.asciidoc'
               - 'docs/**'
-              - '.github/**'
             non-docs:
               - '!**/*.md'
               - '!**/*.asciidoc'
               - '!(docs)/**/*'
-              - '!(.github)/**/*'
 
   test-windows:
     needs: changes

@@ -14,13 +14,3 @@ products:
 # Elastic Distribution of OpenTelemetry .NET known issues
 
 No known issues.
-
-deleteme
-deleteme
-deleteme
-deleteme
-deleteme
-deleteme
-deleteme
-deleteme
-
